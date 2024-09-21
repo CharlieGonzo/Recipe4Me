@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/recipes/v1")
 public class RecipeController {
@@ -25,9 +26,15 @@ public class RecipeController {
         return ResponseEntity.ok(client.getRandomRecipes());
     }
 
-    @GetMapping("/query/{pageNumber}")
-    public ResponseEntity<List<Recipe>> queryRecipes(@RequestBody Params params, @PathVariable Integer pageNumber){
+    @GetMapping("/query")
+    public ResponseEntity<List<Recipe>> queryRecipes(@RequestParam String searchTerm,@RequestParam String diet, @RequestParam int size, @RequestParam Integer pageNumber){
+
+        Params params = new Params(size,diet,searchTerm);
         List<Recipe> recipes = client.getRecipeByParams(params,pageNumber);
+        System.out.println(params.number());
+        System.out.println(recipes);
         return ResponseEntity.ok(recipes);
     }
+
+
 }

@@ -8,6 +8,7 @@ import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.Optional;
 
+@CrossOrigin(origins = "*") // Allow all origins for this controller
 @RestController
 @RequestMapping("/api/users/v1")
 public class UserController {
@@ -35,11 +36,18 @@ public class UserController {
         return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody LoginForm incomingForm) {
+        if(incomingForm.getUsername().isEmpty() || incomingForm.getPassword().isEmpty()) {
+            return ResponseEntity.status(409).build();
+        }
+        System.out.println("here");
         User user = service.findUserByUsername(incomingForm.getUsername());
         if (user != null) {
-            return ResponseEntity.ok(user);
+            if(user.getPassword().equals(incomingForm.getPassword()))
+                return ResponseEntity.ok(user);
+
+            return ResponseEntity.status(409).build();
         }
         return ResponseEntity.badRequest().build();
     }

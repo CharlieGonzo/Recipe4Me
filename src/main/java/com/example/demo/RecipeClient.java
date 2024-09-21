@@ -36,12 +36,14 @@ public class RecipeClient{
                 .build();
     }
 
+
+
     public List<Recipe> getRecipeByParams(Params params,int page){
         String apiEndpoint;
-        if(params.diet().isEmpty()){
-            apiEndpoint = "/recipes/complexSearch?number"+params.number()+"&query="+params.title()+"&offset="+(-10+(10*page));
+        if(params.diet().equals("none")){
+            apiEndpoint = "/recipes/complexSearch?number="+params.number()+"&query="+params.title()+"&offset="+(-10+(10*page));
         }else{
-            apiEndpoint = "/recipes/complexSearch?number"+params.number()+"&diet="+params.diet()+"&query="+params.title()+"&offset="+(-10+(10*page));
+            apiEndpoint = "/recipes/complexSearch?number="+params.number()+"&diet="+params.diet()+"&query="+params.title()+"&offset="+(-10+(10*page));
         }
         String result;
         try{
